@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peacock Blue AC & Refrigerators - Repair Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- ہیڈر -->
+        <header class="header">
+            <h1>🔧 Peacock Blue Air Conditioning & Refrigerators</h1>
+            <p>Repair Management System</p>
+        </header>
+
+        <!-- سرچ بار -->
+        <div class="search-section">
+            <input type="text" id="searchInput" placeholder="🔍 پروجیکٹ تلاش کریں... (Search Projects)" class="search-bar">
+        </div>
+
+        <!-- نیویگیشن ٹیبز -->
+        <nav class="navbar">
+            <button class="nav-btn active" onclick="showTab('dashboard')">📊 ڈیش بورڈ</button>
+            <button class="nav-btn" onclick="showTab('projects')">📁 پروجیکٹس</button>
+            <button class="nav-btn" onclick="showTab('daily')">📅 روزانہ کی تفصیل</button>
+            <button class="nav-btn" onclick="showTab('team')">👥 ٹیم</button>
+            <button class="nav-btn" onclick="showTab('materials')">🛠️ سامان</button>
+        </nav>
+
+        <!-- ڈیش بورڈ ٹیب -->
+        <div id="dashboard" class="tab-content active">
+            <h2>📊 ڈیش بورڈ</h2>
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <h3>کل رقم</h3>
+                    <p class="stat-value" id="totalValue">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>وصول شدہ</h3>
+                    <p class="stat-value" id="amountReceived">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>زیر التوا</h3>
+                    <p class="stat-value" id="pendingAmount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>اخراجات</h3>
+                    <p class="stat-value" id="totalExpenses">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>منافع</h3>
+                    <p class="stat-value" id="totalProfit">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>ٹیم ممبرز</h3>
+                    <p class="stat-value" id="teamCount">0</p>
+                </div>
+            </div>
+            <button class="btn-primary" onclick="printDashboard()">🖨️ ڈیش بورڈ پرنٹ کریں</button>
+        </div>
+
+        <!-- پروجیکٹس ٹیب -->
+        <div id="projects" class="tab-content">
+            <h2>📁 پروجیکٹس</h2>
+            <button class="btn-primary" onclick="openProjectModal()">➕ نیا پروجیکٹ شامل کریں</button>
+            <div id="projectsList" class="projects-list"></div>
+        </div>
+
+        <!-- روزانہ کی تفصیل ٹیب -->
+        <div id="daily" class="tab-content">
+            <h2>📅 روزانہ کی تفصیل</h2>
+            <button class="btn-primary" onclick="openDailyModal()">➕ نئی تفصیل شامل کریں</button>
+            <div id="dailyList" class="daily-list"></div>
+        </div>
+
+        <!-- ٹیم ٹیب -->
+        <div id="team" class="tab-content">
+            <h2>👥 ٹیم</h2>
+            <button class="btn-primary" onclick="openTeamModal()">➕ نیا ممبر شامل کریں</button>
+            <div id="teamList" class="team-list"></div>
+        </div>
+
+        <!-- سامان ٹیب -->
+        <div id="materials" class="tab-content">
+            <h2>🛠️ سامان/مٹیریل</h2>
+            <button class="btn-primary" onclick="openMaterialModal()">➕ نیا سامان شامل کریں</button>
+            <div id="materialsList" class="materials-list"></div>
+        </div>
+    </div>
+
+    <!-- پروجیکٹ موڈل -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeProjectModal()">&times;</span>
+            <h2>نیا پروجیکٹ</h2>
+            <form onsubmit="saveProject(event)">
+                <input type="text" id="projectName" placeholder="پروجیکٹ کا نام" required>
+                <input type="text" id="projectClient" placeholder="کلائنٹ کا نام" required>
+                <input type="number" id="projectTotalValue" placeholder="کل رقم" required>
+                <input type="number" id="projectAmountReceived" placeholder="وصول شدہ رقم" required>
+                <textarea id="projectDescription" placeholder="تفصیل"></textarea>
+                <button type="submit" class="btn-primary">محفوظ کریں</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- روزانہ کی تفصیل موڈل -->
+    <div id="dailyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDailyModal()">&times;</span>
+            <h2>روزانہ کی تفصیل</h2>
+            <form onsubmit="saveDailyEntry(event)">
+                <input type="date" id="dailyDate" required>
+                <select id="dailyProject" required>
+                    <option value="">پروجیکٹ منتخب کریں</option>
+                </select>
+                <input type="number" id="dailyExpenses" placeholder="اخراجات">
+                <input type="number" id="dailyAmountReceived" placeholder="وصول شدہ رقم">
+                <textarea id="dailyNotes" placeholder="نوٹس/تفصیلات"></textarea>
+                <button type="submit" class="btn-primary">محفوظ کریں</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ٹیم موڈل -->
+    <div id="teamModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeTeamModal()">&times;</span>
+            <h2>نیا ٹیم ممبر</h2>
+            <form onsubmit="saveTeamMember(event)">
+                <input type="text" id="teamName" placeholder="نام" required>
+                <input type="text" id="teamPosition" placeholder="عہدہ/مقام" required>
+                <input type="tel" id="teamPhone" placeholder="فون نمبر">
+                <button type="submit" class="btn-primary">محفوظ کریں</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- سامان موڈل -->
+    <div id="materialModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMaterialModal()">&times;</span>
+            <h2>نیا سامان/مٹیریل</h2>
+            <form onsubmit="saveMaterial(event)">
+                <input type="text" id="materialName" placeholder="سامان کا نام" required>
+                <input type="number" id="materialQuantity" placeholder="مقدار" required>
+                <input type="text" id="materialUnit" placeholder="یونٹ (پیس/کلو/لیٹر)" required>
+                <input type="number" id="materialPrice" placeholder="قیمت" required>
+                <button type="submit" class="btn-primary">محفوظ کریں</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
